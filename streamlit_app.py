@@ -119,7 +119,7 @@ else:
             st.write("### Author Style Details")
             # Look up the description for the selected author
             style_context = author_descriptions.get(
-            st.session_state.selected_author.split(" (")[0], ""
+            st.session_state.selected_author.split(" (")[0], "")
             
             # Display the corresponding description
             st.write(style_context)

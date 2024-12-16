@@ -1,24 +1,23 @@
 import streamlit as st
-from openai import OpenAI
+from gemini import Gemini  # Replace OpenAI with Gemini API package (install via pip if required).
 
 # Show title and description.
 st.title("💬 Chatbot")
 st.write(
-    "This is a simple chatbot that uses OpenAI's GPT-3.5 model to generate responses. "
-    "To use this app, you need to provide an OpenAI API key, which you can get [here](https://platform.openai.com/account/api-keys). "
-    "You can also learn how to build this app step by step by [following our tutorial](https://docs.streamlit.io/develop/tutorials/llms/build-conversational-apps)."
+    "This is a simple chatbot that uses the Gemini API to generate responses. "
+    "To use this app, you must store your API key securely in Streamlit's `secrets.toml`. "
+    "Learn how to build apps like this by [following our tutorial](https://docs.streamlit.io/develop/tutorials/llms/build-conversational-apps)."
 )
 
-# Ask user for their OpenAI API key via `st.text_input`.
-# Alternatively, you can store the API key in `./.streamlit/secrets.toml` and access it
-# via `st.secrets`, see https://docs.streamlit.io/develop/concepts/connections/secrets-management
-openai_api_key = st.text_input("OpenAI API Key", type="password")
-if not openai_api_key:
-    st.info("Please add your OpenAI API key to continue.", icon="🗝️")
-else:
+# Retrieve the Gemini API key from `secrets.toml`.
+api_key = st.secrets["GEMINI_API_KEY"]
 
-    # Create an OpenAI client.
-    client = OpenAI(api_key=openai_api_key)
+# Ensure the API key exists.
+if not api_key:
+    st.error("API key not found. Please add it to `secrets.toml`.", icon="🚫")
+else:
+    # Create a Gemini client.
+    client = Gemini(api_key=api_key)
 
     # Create a session state variable to store the chat messages. This ensures that the
     # messages persist across reruns.
@@ -39,9 +38,9 @@ else:
         with st.chat_message("user"):
             st.markdown(prompt)
 
-        # Generate a response using the OpenAI API.
+        # Generate a response using the Gemini API.
         stream = client.chat.completions.create(
-            model="gpt-3.5-turbo",
+            model="gemini-model",  # Use the appropriate model for Gemini.
             messages=[
                 {"role": m["role"], "content": m["content"]}
                 for m in st.session_state.messages

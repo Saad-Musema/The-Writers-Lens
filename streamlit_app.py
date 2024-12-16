@@ -112,9 +112,11 @@ else:
         
         stream = client.generate(prompt=system_message, stream=True)
 
-
-        # Stream the response to the chat using `st.write_stream`, then store it in 
-        # session state.
-        with st.chat_message("assistant"):
-            response = st.write_stream(stream)
-        st.session_state.messages.append({"role": "assistant", "content": response})
+        # Check if the stream is valid
+        if stream is None:
+            st.error("Failed to generate a response. Please try again.")
+        else:
+            # Stream the response to the chat using `st.write_stream`, then store it in session state.
+            with st.chat_message("assistant"):
+                response = st.write_stream(stream)
+            st.session_state.messages.append({"role": "assistant", "content": response})

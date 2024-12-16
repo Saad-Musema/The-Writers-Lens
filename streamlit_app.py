@@ -1,5 +1,6 @@
 import streamlit as st
 import google.generativeai as genai
+from author_styles import author_descriptions
 
 temperature_options = {
     "Very Creative": 1.0,
@@ -24,7 +25,6 @@ st.write(
     "Choose an author, provide a topic, and enjoy creatively styled responses! "
 )
 
-# Retrieve the Gemini API key from `secrets.toml`.
 api_key = "AIzaSyASnkyIRB2Abu4qUY8yfI8K_2sYLqhh5io"
 
 # Ensure the API key exists.
@@ -72,7 +72,6 @@ else:
             "Edgar Allan Poe (Gothic, mysterious)",
             "Jane Austen (Romantic, witty, Regency-era)",
             "George Orwell (Analytical, dystopian)",
-            "Custom Writer",
             "William Shakespeare (Poetic, dramatic with iambic pentameter)",
             "Mark Twain (Humorous, colloquial, social commentary)",
             "Hemingway (Sparse, direct prose focusing on masculinity and human struggle)",
@@ -95,25 +94,6 @@ else:
             "Gabriel García Márquez (Magical realism with vivid prose)",
             "Oscar Wilde (Witty, satirical with social critique)",
             "Dostoevsky (Philosophical, focusing on existential themes)",
-            "John Steinbeck (Clear prose about human dignity and social issues)",
-            "Agatha Christie (Mysteries with tightly-plotted twists)",
-            "Franz Kafka (Existential, absurd narratives about alienation)",
-            "Emily Dickinson (Concise, contemplative poetry about life and death)",
-            "E.M. Forster (Explorations of social and personal conflicts)",
-            "Arthur Conan Doyle (Victorian detective stories with detailed settings)",
-            "Willa Cather (Lyrical descriptions of the American Midwest)",
-            "Khaled Hosseini (Narratives on family, tragedy, and cultural displacement)",
-            "Chinua Achebe (Clear, impactful prose addressing colonialism)",
-            "C.S. Lewis (Philosophical allegory blending Christian themes)",
-            "Philip K. Dick (Speculative fiction questioning reality and identity)",
-            "Alice Walker (Poetic, emotional narratives about race and identity)",
-            "Zora Neale Hurston (Folk stories with African American themes)",
-            "Jean-Paul Sartre (Existential prose focusing on individual freedom)",
-            "Louise Erdrich (Family sagas with Native American culture)",
-            "David Foster Wallace (Verbose, humorous explorations of modern alienation)",
-            "Chimamanda Ngozi Adichie (Engaging narratives with Nigerian culture and feminism)",
-            "William Faulkner (Southern Gothic, focusing on race and history)",
-            "Mario Vargas Llosa (Prose blending politics, identity, and Latin American society)"
         ]
         )
         st.session_state.selected_author = author
@@ -123,22 +103,12 @@ else:
 
         if st.session_state.learning_mode:
             st.write("### Author Style Details")
-            if "Edgar Allan Poe" in author:
-                st.write(
-                    "Poe's style often includes a dark atmosphere, gothic themes, and elaborate descriptions."
-                )
-            elif "Jane Austen" in author:
-                st.write(
-                    "Austen's works feature wit, romantic tension, and detailed depictions of social manners in Regency-era England."
-                )
-            elif "George Orwell" in author:
-                st.write(
-                    "Orwell is known for his clear, concise prose and themes of societal critique, particularly regarding dystopian futures."
-                )
-            elif "Custom Writer" in author:
-                st.write(
-                    "You can provide your own description of a writing style for the chatbot to mimic!"
-                )
+            # Look up the description for the selected author
+            author = st.session_state.selected_author
+            description = author_descriptions.get(author, "No description available.")
+            
+            # Display the corresponding description
+            st.write(description)
 
     # Display the existing chat messages via `st.chat_message`.
     for message in st.session_state.messages:
@@ -182,28 +152,6 @@ else:
     "Gabriel García Márquez": "Magical realism with vibrant prose and exploration of Latin American history.",
     "Oscar Wilde": "Witty, satirical, and often ironic, with a focus on beauty and social critique.",
     "Dostoevsky": "Philosophical and psychological, exploring deep existential themes, guilt, and redemption.",
-    "John Steinbeck": "Clear, direct prose focused on social issues and the dignity of the human spirit.",
-    "Agatha Christie": "Mysterious and methodical, with tightly-plotted narratives filled with twists and suspense.",
-    "Franz Kafka": "Existential and surreal prose often centered around alienation and absurdity.",
-    "Emily Dickinson": "Concise, contemplative poetry with an introspective look at life, death, and nature.",
-    "E.M. Forster": "Sensitive explorations of social and personal conflicts, with a focus on character development.",
-    "Arthur Conan Doyle": "Masterful detective stories often set against detailed Victorian backdrops.",
-    "Willa Cather": "Simple, rural prose capturing the beauty of the American Midwest with lyrical imagery.",
-    "Khaled Hosseini": "Rich narratives blending familial bonds, tragedy, and cultural displacement.",
-    "Chinua Achebe": "Sparse, clear prose addressing the cultural and social consequences of colonialism.",
-    "C.S. Lewis": "Philosophical yet accessible, blending Christian allegory with moral teachings in a fictional context.",
-    "Philip K. Dick": "Speculative fiction questioning reality, identity, and individualism within a dystopian future.",
-    "Alice Walker": "Vibrant, deeply emotional prose often focusing on African American women’s experiences.",
-    "Ralph Waldo Emerson": "Philosophical essays blending natural observation with spiritual introspection.",
-    "Jack London": "Adventure-filled prose with an emphasis on survival, nature, and the human spirit.",
-    "Maya Angelou": "Poetic, deeply personal narratives that explore race, identity, and resilience.",
-    "Zora Neale Hurston": "Rich dialect and folklore, with themes of identity and the African American experience.",
-    "Jean-Paul Sartre": "Existential prose, focusing on individual freedom, anxiety, and the absurdity of existence.",
-    "Louise Erdrich": "Complex family sagas rooted in Native American culture, with themes of identity and history.",
-    "David Foster Wallace": "Dense, verbose, and often humorous prose with an exploration of postmodern alienation.",
-    "Chimamanda Ngozi Adichie": "Crisp, engaging narratives blending Nigerian culture with a modern, feminist viewpoint.",
-    "William Faulkner": "Complex, multi-layered prose reflecting the Southern Gothic style, often focusing on race and history.",
-    "Mario Vargas Llosa": "Rich prose with a focus on politics, identity, and the complexities of Latin American society."
 }
 
 
@@ -217,7 +165,7 @@ else:
             f"Keep the response aligned with this description: {style_context}"
         )
 
-        # Generate a response using the Gemini API.
+        # Generate a response
         model = genai.GenerativeModel("gemini-1.5-flash")
         # response = model.generate_content(
         #     f"{system_message}\n\nUser: {prompt}"

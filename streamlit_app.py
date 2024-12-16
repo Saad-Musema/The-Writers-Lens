@@ -99,16 +99,18 @@ else:
         )
 
         # Generate a response using the Gemini API.
-        stream = client.chat.completions.create(
-            model="gemini-model",  # Use the appropriate model for Gemini.
-            messages=[
-                {"role": "system", "content": system_message}
-            ] + [
-                {"role": m["role"], "content": m["content"]}
-                for m in st.session_state.messages
-            ],
-            stream=True,
-        )
+        # stream = client.chat.completions.create(
+        #     model="gemini-model",  # Use the appropriate model for Gemini.
+        #     messages=[
+        #         {"role": "system", "content": system_message}
+        #     ] + [
+        #         {"role": m["role"], "content": m["content"]}
+        #         for m in st.session_state.messages
+        #     ],
+        #     stream=True,
+        # )
+        
+        stream = client.start_chat(instruction=system_message, messages=[m["content"] for m in st.session_state.messages])
 
         # Stream the response to the chat using `st.write_stream`, then store it in 
         # session state.

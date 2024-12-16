@@ -1,2 +1,2 @@
 streamlit
-gemini
+gemini_ai

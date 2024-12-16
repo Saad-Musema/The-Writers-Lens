@@ -110,7 +110,8 @@ else:
         #     stream=True,
         # )
         
-        stream = client.start_chat(instruction=system_message)
+        stream = client.generate(prompt=system_message, stream=True)
+
 
         # Stream the response to the chat using `st.write_stream`, then store it in 
         # session state.

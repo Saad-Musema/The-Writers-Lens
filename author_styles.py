@@ -1,5 +1,3 @@
-# author_styles.py
-
 author_descriptions = {
     "Edgar Allan Poe": "Poe's style often includes a dark atmosphere, gothic themes, and elaborate descriptions.",
     "Jane Austen": "Austen's works feature wit, romantic tension, and detailed depictions of social manners in Regency-era England.",

@@ -1,6 +1,20 @@
 import streamlit as st
 import google.generativeai as genai
-from author_styles import author_descriptions
+
+author_descriptions = {
+    "Edgar Allan Poe": "Poe's style often includes a dark atmosphere, gothic themes, and elaborate descriptions.",
+    "Jane Austen": "Austen's works feature wit, romantic tension, and detailed depictions of social manners in Regency-era England.",
+    "George Orwell": "Orwell is known for his clear, concise prose and themes of societal critique, particularly regarding dystopian futures.",
+    "Custom Writer": "You can provide your own description of a writing style for the chatbot to mimic!",
+    "Mark Twain": "Twain’s writing is characterized by humor, colloquial speech, and sharp social commentary, often focusing on issues of race and class.",
+    "Shakespeare": "Shakespeare’s writing is rich in poetry, character depth, and exploration of complex human emotions, often using iambic pentameter.",
+    "Hemingway": "Hemingway is known for his concise and understated prose, focusing on themes of existentialism, human struggle, and the beauty of simplicity.",
+    "F. Scott Fitzgerald": "Fitzgerald’s style is lush and descriptive, exploring themes of decadence, the American Dream, and disillusionment, with a particular emphasis on the Jazz Age.",
+    "Leo Tolstoy": "Tolstoy’s writing often features detailed psychological portraits of characters and extensive social and philosophical commentary on Russian society.",
+    "Franz Kafka": "Kafka's writing is marked by themes of alienation, bureaucracy, and the absurdity of existence, often set in nightmarish, surreal environments.",
+    "Dostoevsky": "Dostoevsky is known for exploring complex psychological states, morality, and themes of existential suffering and redemption, often set in tense, dramatic narratives."
+}
+
 
 temperature_options = {
     "Very Creative": 1.0,
@@ -104,11 +118,11 @@ else:
         if st.session_state.learning_mode:
             st.write("### Author Style Details")
             # Look up the description for the selected author
-            author = st.session_state.selected_author
-            description = author_descriptions.get(author, "No description available.")
+            style_context = author_descriptions.get(
+            st.session_state.selected_author.split(" (")[0], ""
             
             # Display the corresponding description
-            st.write(description)
+            st.write(style_context)
 
     # Display the existing chat messages via `st.chat_message`.
     for message in st.session_state.messages:
@@ -125,37 +139,8 @@ else:
             st.markdown(prompt)
 
         # Prompt engineering to integrate author style.
-        author_description = {
-    "Edgar Allan Poe": "Gothic and mysterious prose with vivid imagery.",
-    "Jane Austen": "Witty and romantic style reflecting Regency-era social settings.",
-    "George Orwell": "Analytical and concise prose with dystopian undertones.",
-    "Custom Writer": "Custom style specified by the user.",
-    "William Shakespeare": "Poetic, dramatic language with rich metaphors and iambic pentameter.",
-    "Mark Twain": "Humorous, colloquial prose with social commentary on human nature.",
-    "Hemingway": "Sparse, direct prose often focusing on themes of masculinity and human struggle.",
-    "F. Scott Fitzgerald": "Elegant, lyrical prose capturing the glamour and disillusionment of the Jazz Age.",
-    "Charles Dickens": "Detailed descriptions with a focus on social critique and memorable characters.",
-    "Leo Tolstoy": "Philosophical and moral, with a deep focus on family, morality, and Russian society.",
-    "Virginia Woolf": "Stream-of-consciousness narrative with a focus on inner emotional experiences.",
-    "Ernest Hemingway": "Short, direct prose with deep underlying themes of heroism and despair.",
-    "James Joyce": "Complex, experimental language with a focus on consciousness and interior monologue.",
-    "J.K. Rowling": "Richly detailed narratives filled with magic, imagination, and moral choices.",
-    "Haruki Murakami": "Surreal and philosophical with a blend of the ordinary and the supernatural.",
-    "Kurt Vonnegut": "Darkly humorous, satirical, often anti-war in theme with a fragmented narrative style.",
-    "J.R.R. Tolkien": "Epic fantasy with detailed world-building and high-stakes adventure.",
-    "George R.R. Martin": "Richly detailed, morally complex character-driven narratives within political intrigue.",
-    "Sylvia Plath": "Introspective, poetic prose, often exploring themes of mental health, death, and identity.",
-    "Margaret Atwood": "Complex, speculative fiction with themes of societal control, feminism, and dystopia.",
-    "Toni Morrison": "Lyrical, rich prose exploring African American experiences and societal issues.",
-    "Ray Bradbury": "Imaginative, often speculative prose with a focus on individualism and censorship.",
-    "Harper Lee": "Direct, poignant prose exploring themes of morality, justice, and racial issues.",
-    "Gabriel García Márquez": "Magical realism with vibrant prose and exploration of Latin American history.",
-    "Oscar Wilde": "Witty, satirical, and often ironic, with a focus on beauty and social critique.",
-    "Dostoevsky": "Philosophical and psychological, exploring deep existential themes, guilt, and redemption.",
-}
 
-
-        style_context = author_description.get(
+        style_context = author_descriptions.get(
         st.session_state.selected_author.split(" (")[0], ""
     )
 
